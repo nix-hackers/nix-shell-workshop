@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3;
     maintainers = with maintainers; [ flosse yurrriq ];
-    platforms = platforms.unix;
+    inherit (rust.meta) platforms;
   };
 }
