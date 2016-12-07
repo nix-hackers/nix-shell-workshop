@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, cargo }:
+{ stdenv, rust, cargo }:
 
 stdenv.mkDerivation rec {
   name = "hello-rust-${version}";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     cp -p target/release/hello-rust $out/bin/
   '';
 
-  buildInputs = [ rustPlatform.rustc cargo ];
+  buildInputs = [ rust.rustc cargo ];
 
   meta = with stdenv.lib; {
     description = "Print \"Hello, world!\" with Rust";
