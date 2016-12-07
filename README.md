@@ -1,79 +1,153 @@
 # nix-shell workshop
 
-## cpp program with custom library
+## C++ — custom library
 
-the example features a self made library called `mylib` which is packaged
-using nix - see `mylib.nix` and `default.nix` how that is done.
+*Package a custom library [`mylib`][] and use it in a program [`main`][].*
 
-the library `mylib` is used in a program called `main`.
+Check out [`mylib.nix`][] and [`default.nix`][] to see how it's done.
 
-how to build: enter environment by typing `nix-shell` in ./c-programs afterwards
-change directory `cd main` and run `make`
-
-finally run `./main` to see the ultimate answer:
-
-    ./main 
-    hello world from the #cccamp2015, the answer is 
-    42
-
-## go programs
-
-this example features a minimal webserver. It shows a "Hello 
-World" html page on port 8080.
-To start the Server run:
-
-    cd goexample
-    nix-shell    
-    go run helloworld.go
-
-## qt program
-
-this example features a qt5 console application `console`:
-
-run `cd qt-program` and `nix-shell` to get a qt5 including environment. afterwards
-run `qmake` and `make` to generate the console binary. finally run `./console` to obtain:
-
-    hello beautiful world, from #cccamp2015! 
-
-## perl
-
-run `cd perl` and inside there run `nix-shell -p perlPackages.WWWCurl -p perl`, afterwards run
-`./www_curl_easy.pl` and see strange gibberish strings coming to stdout - ooooohhh what is that?
-
-note: no danger for your system, just carry on, there is much to see!
-
-## python
-enter environment by typing `nix-shell` in ./python-program
-
-run simpleCurl by running `python simpleCurl http://test.de`
-
-it will output the html of http://test.de
-
-## rust
-enter the environment by typing `nix-shell` in `./rust-programs`.
-
-afterwards run `hello-rust` and see the output:
-
-    Hello, world!
+[`mylib`]: ./cpp/mylib/
+[`main`]: ./cpp/main
+[`mylib.nix`]: ./cpp/mylib.nix
+[`default.nix`]: ./cpp/default.nix
 
 
-# questions
-* pick 3 of the examples above and build the software as described using `nix-shell` and run the programs to see that they work
-* is `nix-shell` limited to run exclusivly on NixOS or can it be used on other platforms as well? 
-* why does the `cpp program with custom library` find the `mylib.so`, as for instance, pkg-config is not used at all?
-* use `nix-shell -p clang` (instead of using nix-shell with default.nix) and compile the cpp program+library example using llvm's `clang++` instead of `g++`
-* you probably noticed that when you use `nix-shell -p clang` that it ignores `default.nix` and does not build mylib and thus you have to modify the Makefiles of the library and main program to get it working but there is a different approach. that is: use a different standard environment or stdenv for short. see `default-clang.nix` where `clangStdenv` is used instead of `stdenv`
-* when you compile the `cpp program with custom library`, can you still run the program from a different environment where you don't use nix-shell prior execution? also try this for the `python` example above and compare the results!
-* write a `default.nix` for the `perl` example, so that you don't need to pass -p on the shell anymore
-* what is the effect of running `nix-shell --pure` in one shell vs. running `nix-shell` in a second shell? use the `export` command in either to see what parameters changed. use https://www.diffchecker.com/diff to compare the values you obtained
-* issue `nix-env -qaP | grep python` and see that there is python 2.x and 3.x; you can filter the search further using `| grep -v foo` to filter out all lines containing 'foo'. figure out how to get a nix-shell with python 2.x and one with python 3.x, issue `python --version` to verify that you got the right version!
-* nix-shell can be used with a local checkout of nixpkgs, `nix-shell -I nixpkgs=/foo/bar/nixpkgs --pure -p cmake`, therefore clone nixpkgs 'master' from https://github.com/nixos/nixpkgs and issue the above command. compare the result to `nix-shell -I nixpkgs=/foo/bar/nixpkgs --pure -p cmake` in regards to amount of downloads/ build targets and compare the two outcomes
-* what is the major difference between using `nix-shell` and `myEnvFun`, read https://lastlog.de/blog/posts/developing_software_using_nixos.html to learn about myEnvFun. afterwards adapt the `cpp program with custom library` to use myEnvFun instead of `nix-shell` 
-* play with persistent `nix-shell` environments, see https://nixos.org/wiki/Development_Environments#Making_a_Persistent_nix-shell_Environment
+- Enter the environment:
 
-# documentation
-* https://nixos.org/wiki/Development_Environments
-* https://lastlog.de/blog/posts/developing_software_using_nixos.html
+  ```fish
+  cd cpp
+  nix-shell
+  ```
 
-# license
-please feel free to copy as this repo is public domain
+- Build and install [`mylib`][]:
+
+  ```fish
+  make -C mylib all install prefix=/usr/local
+  ```
+
+  *Adjust `prefix` as necessary.*
+
+- Change the working directory to [`main`][] and build it:
+
+  ```fish
+  cd main
+  make
+  ```
+- Run the example to see the ultimate answer:
+
+  ```
+  $ ./main
+  hello world from the #cccamp2015, the answer is
+  42
+  ```
+
+
+<!-- FIXME -->
+<!-- ## Go — minimal webserver -->
+
+<!-- *Serve a "Hello World" HTML page on port 8080.* -->
+
+<!-- ```bash -->
+<!-- cd go -->
+<!-- nix-shell -->
+<!-- go run helloworld.go -->
+<!-- ``` -->
+
+
+<!-- FIXME -->
+<!-- ## Qt — console application -->
+
+<!-- *A Qt 5 console application.* -->
+
+<!-- - Enter the environment: -->
+
+<!--   ```fish -->
+<!--   cd qt -->
+<!--   nix-shell -->
+<!--   ``` -->
+
+<!-- - Generate the console binary: -->
+
+<!--   ```fish -->
+<!--   qmake -->
+<!--   make -->
+<!--   ``` -->
+
+<!-- - Run the example: -->
+
+<!--   ``` -->
+<!--   $ ./console -->
+<!--   hello beautiful world, from #cccamp2015! -->
+<!--   ``` -->
+
+
+## Perl — `WWW::Curl::Easy` script
+
+*Download Perl 5.18.2 via `WWW::Curl::Easy`.*
+
+- Enter the environment:
+
+  ```fish
+  cd perl
+  nix-shell -p perl perlPackages.WWWCurl
+  ```
+
+- Run the example:
+
+  ```fish
+  ./www_curl_easy.pl
+  ```
+
+
+## Python — `curl`-like script
+
+- Enter environment:
+
+  ```fish
+  cd python
+  nix-shell
+  ```
+
+- Run the example to print the HTML of http://test.de:
+
+  ```fish
+  python simpleCurl.py http://test.de
+  ```
+
+
+## Rust — `Hello, world!`
+
+- Enter the environment:
+
+  ```fish
+  cd rust
+  nix-shell
+  ```
+
+- Run the example to print `Hello, world!`:
+
+  ```
+  $ hello-rust
+  Hello, world!
+  ```
+
+
+# Documentation
+
+- [Development Environments][]
+- [Developing Software using NixOS][blog]
+
+[Development Environments]: https://nixos.org/wiki/Development_Environments
+[blog]: https://lastlog.de/blog/posts/developing_software_using_nixos.html
+
+
+# License
+
+<p xmlns:dct="http://purl.org/dc/terms/">
+<a rel="license" href="http://creativecommons.org/publicdomain/mark/1.0/">
+<img src="http://i.creativecommons.org/p/mark/1.0/88x31.png"
+     style="border-style: none;" alt="Public Domain Mark" />
+</a>
+<br />
+This work (<span property="dct:title">nix-shell workshop</span>, by <a href="https://github.com/nixcloud/nix-shell-workshop/graphs/contributors" rel="dct:creator"><span property="dct:title">Joachim Schiele, seitz, Justin Humm, Lassulus, Markus Kohlhase, Alexander Flatter</span></a>), identified by <a href="https://github.com/yurrriq" rel="dct:publisher"><span property="dct:title">Eric Bailey</span></a>, is free of known copyright restrictions.
+</p>
