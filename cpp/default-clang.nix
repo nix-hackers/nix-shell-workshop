@@ -10,5 +10,3 @@ clangStdenv.mkDerivation rec {
 
   buildInputs = [ mylib ];
 }
-
-

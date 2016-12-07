@@ -1,11 +1,9 @@
-{stdenv}:
+{ stdenv }:
 
 stdenv.mkDerivation rec {
   name = "mylib-1.0.0";
 
-  src = ./mylib; 
-
-  buildInputs = [ ];
+  src = ./mylib;
 
   installPhase = ''
     mkdir -p $out/lib
@@ -13,11 +11,10 @@ stdenv.mkDerivation rec {
     prefix=$out make install
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "mylib";
-    homepage = "http://www.mylib.com/";
-    license = "GPL2";
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    homepage = "https://github.com/yurrriq/nix-shell-workshop/tree/master/cpp/mylib";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ qknight yurrriq ];
   };
 }
-

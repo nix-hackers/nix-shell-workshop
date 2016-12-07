@@ -10,5 +10,3 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mylib ];
 }
-
-
