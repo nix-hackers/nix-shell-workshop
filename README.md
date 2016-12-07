@@ -42,16 +42,21 @@ Check out [`mylib.nix`][] and [`default.nix`][] to see how it's done.
   ```
 
 
-<!-- FIXME -->
-<!-- ## Go — minimal webserver -->
+## Go — minimal webserver
 
-<!-- *Serve a "Hello World" HTML page on port 8080.* -->
+*Serve a "Hello World" HTML page on port 8080.*
 
-<!-- ```bash -->
-<!-- cd go -->
-<!-- nix-shell -->
-<!-- go run helloworld.go -->
-<!-- ``` -->
+- Enter the environment:
+  ```fish
+  cd go
+  nix-shell
+  ```
+  
+- Run the example:
+
+  ```fish
+  hello-go
+  ```
 
 
 <!-- FIXME -->

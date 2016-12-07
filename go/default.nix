@@ -1,11 +1,12 @@
-with import <nixpkgs> { };
-with goPackages;
+with import <nixpkgs> {};
 
-buildGoPackage rec {
-  name = "helloWorld";
-  version = "0.0.1";
+let
+  helloGo = callPackage ./helloGo.nix {};
+in
 
-  goPackagePath = ".";
+stdenv.mkDerivation rec {
+  name = "go-example-${version}";
+  version = "0.0.2";
 
-  buildInputs = [ go ];
+  buildInputs = [ helloGo ];
 }
